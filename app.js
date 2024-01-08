@@ -60,10 +60,6 @@ app.post("/assignments", (req, res) => {
 app.delete("/assignments/:assignmentsId", (req, res) => {
   let postIdFromClient = Number(req.params.assignmentsId);
 
-  let postdata = assignmentsData.filter((item) => item.id !== postIdFromClient);
-
-  assignmentsData = postdata;
-
   const hasFound = assignmentsData.find((item) => {
     return item.id === postIdFromClient;
   });
@@ -71,6 +67,10 @@ app.delete("/assignments/:assignmentsId", (req, res) => {
   if (!hasFound) {
     return res.json({ message: "Cannot delete, No data available!" });
   }
+
+  let postdata = assignmentsData.filter((item) => item.id !== postIdFromClient);
+
+  assignmentsData = postdata;
 
   return res.json({
     message: `Assignment Id : ${postIdFromClient} has been deleted successfully`,
@@ -81,12 +81,6 @@ app.put("/assignments/:assignmentsId", (req, res) => {
   let postIdFromClient = Number(req.params.assignmentsId);
   const updatePost = { ...req.body };
 
-  const dataIndex = assignmentsData.findIndex((item) => {
-    return item.id === postIdFromClient;
-  });
-
-  assignmentsData[dataIndex] = { id: postIdFromClient, ...updatePost };
-
   const hasFound = assignmentsData.find((item) => {
     return item.id === postIdFromClient;
   });
@@ -94,6 +88,12 @@ app.put("/assignments/:assignmentsId", (req, res) => {
   if (!hasFound) {
     return res.json({ message: "Cannot update, No data available!" });
   }
+
+  const dataIndex = assignmentsData.findIndex((item) => {
+    return item.id === postIdFromClient;
+  });
+
+  assignmentsData[dataIndex] = { id: postIdFromClient, ...updatePost };
 
   return res.json({
     message: `Assignment Id : ${postIdFromClient} has been updated successfully`,
